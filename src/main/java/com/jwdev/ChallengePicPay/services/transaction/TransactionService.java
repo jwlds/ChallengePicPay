@@ -49,7 +49,12 @@ public class TransactionService {
 
     public Transaction createTransaction(TransactionDTO payload) throws Exception{
         User sender = this.userService.findUserById(payload.senderId());
+
+        if (sender.getBalance().compareTo(payload.value()) < 0) {
+            throw new Exception("Insufficient balance to perform the transaction");
+        }
         User receiver = this.userService.findUserById(payload.receiveId());
+
         boolean isAuthorization = this.authorizeTransaction(sender,payload.value());
         if(!isAuthorization) { throw new Exception("unauthorized betrayal");  }
         Transaction transaction = new Transaction();
@@ -61,6 +66,7 @@ public class TransactionService {
         sender.setBalance(sender.getBalance().subtract(payload.value()));
         receiver.setBalance(receiver.getBalance().add(payload.value()));
         this.transactionRepository.insert(transaction);
+
 
 
 
@@ -87,4 +93,5 @@ public class TransactionService {
         }
         return false;
      }
+
 }

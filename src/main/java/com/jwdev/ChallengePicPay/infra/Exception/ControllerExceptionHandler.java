@@ -27,7 +27,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity threat500(Exception exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), "404");
+        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), "500");
         return ResponseEntity.internalServerError().body(exceptionDTO);
     }
 }
